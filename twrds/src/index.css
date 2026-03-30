@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #f5f2ec;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes floatA {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+  33%       { transform: translateY(-28px) translateX(12px) scale(1.04); }
+  66%       { transform: translateY(14px) translateX(-8px) scale(0.97); }
+}
+
+@keyframes floatB {
+  0%, 100% { transform: translateY(0px) translateX(0px) scale(1.02); }
+  40%       { transform: translateY(22px) translateX(-14px) scale(0.96); }
+  70%       { transform: translateY(-16px) translateX(10px) scale(1.05); }
+}
+
+@keyframes floatC {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50%       { transform: translateY(-18px) scale(1.06); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position: 300% center; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.6; }
+  100% { transform: scale(1.7);  opacity: 0; }
+}
+
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(72px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-teal {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle at 40% 40%, #a8dbd5 0%, #5fb5ae 60%, transparent 100%);
+  opacity: 0.28;
+  top: -160px;
+  right: -140px;
+  animation: floatA 11s ease-in-out infinite;
+}
+
+.blob-sand {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle at 60% 60%, #e8d9c0 0%, #d4b896 60%, transparent 100%);
+  opacity: 0.32;
+  bottom: -80px;
+  left: -100px;
+  animation: floatB 14s ease-in-out infinite;
+}
+
+.blob-rose {
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, #f0c4c4 0%, #e8a0a0 70%, transparent 100%);
+  opacity: 0.2;
+  top: 45%;
+  left: 50%;
+  animation: floatC 9s ease-in-out infinite;
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #1a6b64 0%,
+    #2d9e96 30%,
+    #5ecec5 50%,
+    #2d9e96 70%,
+    #1a6b64 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}

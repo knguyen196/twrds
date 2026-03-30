@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+.node_modules
+
+# Build output
+dist
+dist-ssr
+
+# Environment variables — may contain API keys, never commit these
+.env
+.env.*
+*.local
+
+# Test coverage output
+coverage
+
+# Keys and certificates
+*.pem
+*.key
+*.p12
+*.cert
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local file history (VS Code extension)
+.history
