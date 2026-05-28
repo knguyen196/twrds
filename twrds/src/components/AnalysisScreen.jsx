@@ -1,9 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import Groq from 'groq-sdk'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const groq = new Groq({ apiKey: import.meta.env.VITE_GROQ_API_KEY, dangerouslyAllowBrowser: true })
+async function groqChat(messages, max_tokens, response_format) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, max_tokens, response_format }),
+  })
+  if (!res.ok) throw new Error(`API error ${res.status}`)
+  return res.json()
+}
 
 const confidenceConfig = {
   high:   { color: '#10b981', track: '#d1fae5', label: 'High',   pct: 0.9,  text: 'text-emerald-600' },
@@ -149,12 +156,11 @@ Respond with ONLY valid JSON in this exact format:
 
 Output JSON only. No text before or after.`
 
-      const result = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: prompt }],
-        max_tokens: 1000,
-        response_format: { type: 'json_object' },
-      })
+      const result = await groqChat(
+        [{ role: 'user', content: prompt }],
+        1000,
+        { type: 'json_object' }
+      )
       const text = result.choices[0].message.content
       setAnalysis(JSON.parse(text))
     } catch (e) {

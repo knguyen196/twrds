@@ -1,9 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import Groq from 'groq-sdk'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const groq = new Groq({ apiKey: import.meta.env.VITE_GROQ_API_KEY, dangerouslyAllowBrowser: true })
+async function groqChat(messages, max_tokens, response_format) {
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, max_tokens, response_format }),
+  })
+  if (!res.ok) throw new Error(`API error ${res.status}`)
+  return res.json()
+}
 
 export default function ChatScreen() {
   const navigate = useNavigate()
@@ -56,11 +63,7 @@ Do not include that phrase until you genuinely have enough information.`
       ? `${buildSystemPrompt()}\n\nStart by warmly acknowledging the previous decision and asking what's changed or what they'd like to revisit.`
       : `${buildSystemPrompt()}\n\nStart by warmly greeting the user and asking them to describe their decision.`
     try {
-      const result = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: [{ role: 'user', content: opener }],
-        max_tokens: 500,
-      })
+      const result = await groqChat([{ role: 'user', content: opener }], 500)
       const text = result.choices[0].message.content
       messagesRef.current = [
         { role: 'user', content: opener },
@@ -83,11 +86,7 @@ Do not include that phrase until you genuinely have enough information.`
     setError(null)
     try {
       messagesRef.current.push({ role: 'user', content: input })
-      const result = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages: messagesRef.current,
-        max_tokens: 500,
-      })
+      const result = await groqChat(messagesRef.current, 500)
       const text = result.choices[0].message.content
       messagesRef.current.push({ role: 'assistant', content: text })
       if (text.includes('READY_FOR_ANALYSIS')) {
